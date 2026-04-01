@@ -1,0 +1,735 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>FrameForge AI — High-Impact AI Ads. Scaled to Convert.</title>
+  <meta name="description" content="I combine cinematic craftsmanship with AI-driven strategy to make your product irresistible." />
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+
+  <!-- React + Babel -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.23.2/babel.min.js"></script>
+
+  <!-- Framer Motion -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/framer-motion/10.16.4/framer-motion.js"></script>
+
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background: #0B0B0B;
+      color: #FFFFFF;
+      font-family: 'Manrope', sans-serif;
+      overflow-x: hidden;
+    }
+
+    .font-display {
+      font-family: 'Manrope', sans-serif;
+      font-weight: 800;
+      letter-spacing: -0.035em;
+    }
+
+    ::-webkit-scrollbar { width: 4px; }
+    ::-webkit-scrollbar-track { background: #0B0B0B; }
+    ::-webkit-scrollbar-thumb { background: #007AFF; border-radius: 2px; }
+
+    .grain-overlay {
+      position: fixed; inset: 0; pointer-events: none; z-index: 999;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+      opacity: 0.35;
+    }
+
+    .hero-bg {
+      background:
+        radial-gradient(ellipse 80% 60% at 50% 0%, rgba(0,122,255,0.13) 0%, transparent 70%),
+        radial-gradient(ellipse 60% 40% at 100% 100%, rgba(0,122,255,0.07) 0%, transparent 60%),
+        #0B0B0B;
+    }
+
+    .card-glow { transition: box-shadow 0.3s ease, border-color 0.3s ease, transform 0.3s ease; }
+    .card-glow:hover {
+      box-shadow: 0 0 40px rgba(0,122,255,0.15), 0 0 1px rgba(0,122,255,0.4);
+      border-color: rgba(0,122,255,0.35) !important;
+      transform: translateY(-3px);
+    }
+
+    .btn-primary {
+      background: #007AFF; color: white; border: none;
+      padding: 14px 32px; border-radius: 8px;
+      font-family: 'Manrope', sans-serif; font-weight: 600; font-size: 15px;
+      cursor: pointer; letter-spacing: 0.01em;
+      transition: all 0.2s ease;
+      display: inline-flex; align-items: center; gap: 8px;
+      text-decoration: none;
+    }
+    .btn-primary:hover { background: #0066dd; transform: translateY(-2px); box-shadow: 0 8px 24px rgba(0,122,255,0.35); }
+
+    .btn-ghost {
+      background: transparent; color: white;
+      border: 1px solid rgba(255,255,255,0.2);
+      padding: 13px 28px; border-radius: 8px;
+      font-family: 'Manrope', sans-serif; font-weight: 500; font-size: 15px;
+      cursor: pointer; transition: all 0.2s ease;
+      display: inline-flex; align-items: center; gap: 8px;
+      text-decoration: none;
+    }
+    .btn-ghost:hover { border-color: rgba(255,255,255,0.5); background: rgba(255,255,255,0.05); }
+
+    .video-placeholder {
+      position: relative;
+      background: linear-gradient(135deg, #111 0%, #1a1a2e 50%, #0d0d1a 100%);
+      overflow: hidden;
+    }
+    .video-placeholder::before {
+      content: '';
+      position: absolute; inset: 0;
+      background: linear-gradient(45deg, transparent 30%, rgba(0,122,255,0.05) 50%, transparent 70%);
+      animation: shimmer 3s infinite;
+    }
+    @keyframes shimmer { 0%,100% { opacity: 0.5; } 50% { opacity: 1; } }
+
+    .input-field {
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 8px; padding: 14px 16px;
+      color: white; font-family: 'Manrope', sans-serif;
+      font-size: 15px; width: 100%; outline: none;
+      transition: border-color 0.2s ease;
+    }
+    .input-field:focus { border-color: rgba(0,122,255,0.6); }
+    .input-field::placeholder { color: rgba(255,255,255,0.3); }
+    textarea.input-field { resize: vertical; min-height: 120px; }
+    select.input-field option { background: #111; }
+
+    .bento-item {
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(255,255,255,0.07);
+      border-radius: 16px; overflow: hidden;
+      transition: all 0.3s ease; cursor: pointer;
+    }
+    .bento-item:hover {
+      border-color: rgba(0,122,255,0.3);
+      background: rgba(0,122,255,0.04);
+      transform: translateY(-2px);
+    }
+
+    .stat-badge {
+      background: rgba(0,122,255,0.1);
+      border: 1px solid rgba(0,122,255,0.25);
+      color: #007AFF; padding: 4px 12px;
+      border-radius: 100px; font-size: 13px; font-weight: 600;
+    }
+
+    .nav-blur {
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      background: rgba(11,11,11,0.85);
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+    }
+
+    .tag-pill {
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.1);
+      padding: 6px 14px; border-radius: 100px;
+      font-size: 12px; font-weight: 600;
+      color: rgba(255,255,255,0.55);
+      letter-spacing: 0.08em; text-transform: uppercase;
+    }
+
+    .section-alt { background: rgba(255,255,255,0.018); }
+
+    /* Scroll reveal via CSS for non-JS fallback */
+    .reveal { opacity: 0; transform: translateY(28px); transition: opacity 0.7s ease, transform 0.7s ease; }
+    .reveal.visible { opacity: 1; transform: none; }
+
+    /* Bento grid responsive */
+    .bento-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      grid-auto-rows: 200px;
+      gap: 16px;
+    }
+    @media (max-width: 900px) {
+      .bento-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (max-width: 560px) {
+      .bento-grid { grid-template-columns: 1fr; }
+    }
+
+    .bento-tall { grid-row: span 2; }
+
+    /* Process grid responsive */
+    .process-grid {
+      display: grid;
+      grid-template-columns: 1fr 80px 1fr;
+      align-items: center;
+      min-height: 160px;
+    }
+    @media (max-width: 700px) {
+      .process-grid { grid-template-columns: 48px 1fr; }
+      .process-right-hide { display: none !important; }
+      .process-left-hide { display: none !important; }
+    }
+
+    /* Form grid */
+    .form-two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    @media (max-width: 560px) { .form-two-col { grid-template-columns: 1fr; } }
+
+    /* Services grid */
+    .services-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+    @media (max-width: 900px) { .services-grid { grid-template-columns: 1fr; } }
+
+    /* Testimonials grid */
+    .testimonials-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+    @media (max-width: 900px) { .testimonials-grid { grid-template-columns: 1fr; } }
+
+    /* Nav desktop links */
+    .nav-links { display: flex; gap: 36px; }
+    @media (max-width: 768px) { .nav-links { display: none; } }
+
+    /* Stats bar */
+    .stats-bar { display: flex; gap: 48px; justify-content: center; flex-wrap: wrap; }
+
+    /* Hero buttons */
+    .hero-btns { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; }
+
+    /* Modal overlay */
+    .modal-overlay {
+      position: fixed; inset: 0;
+      background: rgba(0,0,0,0.92);
+      z-index: 200; display: flex;
+      align-items: center; justify-content: center;
+      padding: 24px;
+    }
+
+    /* Scan-line texture for bento items */
+    .scanlines {
+      position: absolute; inset: 0;
+      background-image: repeating-linear-gradient(
+        0deg,
+        rgba(255,255,255,0.012) 0px,
+        rgba(255,255,255,0.012) 1px,
+        transparent 1px,
+        transparent 4px
+      );
+      pointer-events: none;
+    }
+
+    /* Bounce animation for scroll cue */
+    @keyframes bounce { 0%,100% { transform: translateY(0); } 50% { transform: translateY(8px); } }
+    .bounce { animation: bounce 2s infinite; }
+
+    /* Fade-in animation */
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+    .fade-in { animation: fadeIn 0.6s ease forwards; }
+
+    /* Blue dot pulse */
+    @keyframes pulse { 0%,100% { box-shadow: 0 0 6px #007AFF; } 50% { box-shadow: 0 0 14px #007AFF, 0 0 28px rgba(0,122,255,0.4); } }
+    .dot-pulse { animation: pulse 2.5s infinite; }
+  </style>
+</head>
+<body>
+  <div id="root"></div>
+
+  <script type="text/babel">
+    const { useState, useEffect, useRef } = React;
+    const { motion, AnimatePresence, useScroll, useTransform } = window.Motion || window.FramerMotion || {};
+
+    // ── ICONS (inline SVG) ────────────────────────────────────────────────────
+    const IconPlay   = () => <svg width="16" height="16" viewBox="0 0 24 24" fill="white"><polygon points="5,3 19,12 5,21"/></svg>;
+    const IconArrow  = () => <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12,5 19,12 12,19"/></svg>;
+    const IconZap    = () => <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#007AFF" strokeWidth="2"><polygon points="13,2 3,14 12,14 11,22 21,10 12,10"/></svg>;
+    const IconFilm   = () => <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#007AFF" strokeWidth="2"><rect x="2" y="2" width="20" height="20" rx="2"/><line x1="7" y1="2" x2="7" y2="22"/><line x1="17" y1="2" x2="17" y2="22"/><line x1="2" y1="12" x2="22" y2="12"/><line x1="2" y1="7" x2="7" y2="7"/><line x1="17" y1="7" x2="22" y2="7"/><line x1="17" y1="17" x2="22" y2="17"/><line x1="2" y1="17" x2="7" y2="17"/></svg>;
+    const IconLayers = () => <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#007AFF" strokeWidth="2"><polygon points="12,2 2,7 12,12 22,7"/><polyline points="2,17 12,22 22,17"/><polyline points="2,12 12,17 22,12"/></svg>;
+    const IconChevron= () => <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.3)" strokeWidth="2"><polyline points="6,9 12,15 18,9"/></svg>;
+    const IconSend   = () => <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22,2 15,22 11,13 2,9"/></svg>;
+    const IconStar   = () => <svg width="14" height="14" viewBox="0 0 24 24" fill="#007AFF" stroke="none"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/></svg>;
+    const IconCheck  = () => <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#007AFF" strokeWidth="2.5"><polyline points="20,6 9,17 4,12"/></svg>;
+    const IconX      = () => <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>;
+    const IconCheckBig = () => <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#007AFF" strokeWidth="2.5"><polyline points="20,6 9,17 4,12"/></svg>;
+
+    // ── SCROLL REVEAL HOOK ────────────────────────────────────────────────────
+    function useScrollReveal() {
+      useEffect(() => {
+        const els = document.querySelectorAll('.reveal');
+        const io = new IntersectionObserver((entries) => {
+          entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); } });
+        }, { threshold: 0.1, rootMargin: '-40px' });
+        els.forEach(el => io.observe(el));
+        return () => io.disconnect();
+      }, []);
+    }
+
+    function Reveal({ children, delay = 0 }) {
+      return (
+        <div className="reveal" style={{ transitionDelay: `${delay}s` }}>
+          {children}
+        </div>
+      );
+    }
+
+    // ── NAV ───────────────────────────────────────────────────────────────────
+    function Nav() {
+      const [scrolled, setScrolled] = useState(false);
+      useEffect(() => {
+        const fn = () => setScrolled(window.scrollY > 40);
+        window.addEventListener('scroll', fn);
+        return () => window.removeEventListener('scroll', fn);
+      }, []);
+
+      return (
+        <nav className={scrolled ? 'nav-blur' : ''}
+          style={{ position:'fixed', top:0, left:0, right:0, zIndex:100, transition:'all 0.3s' }}>
+          <div style={{ maxWidth:1200, margin:'0 auto', padding:'0 24px', height:68, display:'flex', alignItems:'center', justifyContent:'space-between' }}>
+            <div style={{ display:'flex', alignItems:'center', gap:8 }}>
+              <div className="dot-pulse" style={{ width:8, height:8, borderRadius:'50%', background:'#007AFF' }} />
+              <span className="font-display" style={{ fontSize:18 }}>FrameForge AI</span>
+            </div>
+            <div className="nav-links">
+              {['Services','Work','Process','Contact'].map(l => (
+                <a key={l} href={`#${l.toLowerCase()}`}
+                  style={{ color:'rgba(255,255,255,0.55)', textDecoration:'none', fontSize:14, fontWeight:500, transition:'color 0.2s' }}
+                  onMouseEnter={e=>e.target.style.color='#fff'}
+                  onMouseLeave={e=>e.target.style.color='rgba(255,255,255,0.55)'}
+                >{l}</a>
+              ))}
+            </div>
+            <a href="#contact" className="btn-primary" style={{ padding:'10px 22px', fontSize:14 }}>Book a Call</a>
+          </div>
+        </nav>
+      );
+    }
+
+    // ── HERO ──────────────────────────────────────────────────────────────────
+    function Hero() {
+      const [showModal, setShowModal] = useState(false);
+
+      return (
+        <section className="hero-bg" style={{ minHeight:'100vh', display:'flex', flexDirection:'column', alignItems:'center', justifyContent:'center', padding:'120px 24px 80px', position:'relative', overflow:'hidden' }}>
+          {/* Orbs */}
+          <div style={{ position:'absolute', top:'15%', right:'8%', width:500, height:500, background:'radial-gradient(circle, rgba(0,122,255,0.10) 0%, transparent 70%)', borderRadius:'50%', filter:'blur(50px)', pointerEvents:'none' }} />
+          <div style={{ position:'absolute', bottom:'15%', left:'5%', width:320, height:320, background:'radial-gradient(circle, rgba(0,122,255,0.06) 0%, transparent 70%)', borderRadius:'50%', filter:'blur(60px)', pointerEvents:'none' }} />
+
+          <div style={{ maxWidth:900, textAlign:'center', position:'relative' }} className="fade-in">
+            <div style={{ display:'flex', justifyContent:'center', marginBottom:28 }}>
+              <span className="tag-pill">AI-Powered Ad Creation Agency</span>
+            </div>
+
+            <h1 className="font-display" style={{ fontSize:'clamp(44px, 8vw, 90px)', lineHeight:1.02, letterSpacing:'-0.04em', marginBottom:28, color:'#fff' }}>
+              High-Impact AI Ads.{' '}
+              <span style={{ color:'#007AFF' }}>Scaled</span>{' '}
+              to Convert.
+            </h1>
+
+            <p style={{ fontSize:'clamp(16px, 2.2vw, 20px)', color:'rgba(255,255,255,0.52)', lineHeight:1.7, maxWidth:640, margin:'0 auto 44px', fontWeight:400 }}>
+              I combine cinematic craftsmanship with AI-driven strategy to make your product{' '}
+              <span style={{ color:'rgba(255,255,255,0.82)', fontWeight:600 }}>irresistible.</span>
+            </p>
+
+            <div className="hero-btns">
+              <button className="btn-primary" style={{ fontSize:16, padding:'16px 36px' }} onClick={() => setShowModal(true)}>
+                <IconPlay /> Watch the Reel
+              </button>
+              <a href="#contact" className="btn-ghost" style={{ fontSize:16, padding:'16px 32px' }}>
+                Get a Proposal <IconArrow />
+              </a>
+            </div>
+
+            {/* Stats */}
+            <div className="stats-bar" style={{ marginTop:72 }}>
+              {[['50+','Ads Delivered'],['3.2×','Avg. ROAS Lift'],['7 Days','Turnaround']].map(([num, label]) => (
+                <div key={num} style={{ textAlign:'center' }}>
+                  <div className="font-display" style={{ fontSize:30, color:'#fff' }}>{num}</div>
+                  <div style={{ fontSize:13, color:'rgba(255,255,255,0.38)', marginTop:4 }}>{label}</div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Scroll cue */}
+          <div className="bounce" style={{ position:'absolute', bottom:32, left:'50%', transform:'translateX(-50%)' }}>
+            <IconChevron />
+          </div>
+
+          {/* Modal */}
+          {showModal && (
+            <div className="modal-overlay" onClick={() => setShowModal(false)}>
+              <div
+                className="video-placeholder"
+                style={{ width:'100%', maxWidth:900, aspectRatio:'16/9', borderRadius:16, overflow:'hidden', position:'relative' }}
+                onClick={e => e.stopPropagation()}
+              >
+                <div style={{ position:'absolute', inset:0, display:'flex', flexDirection:'column', alignItems:'center', justifyContent:'center', gap:16 }}>
+                  <div style={{ width:72, height:72, borderRadius:'50%', background:'rgba(0,122,255,0.2)', border:'1px solid rgba(0,122,255,0.4)', display:'flex', alignItems:'center', justifyContent:'center' }}>
+                    <svg width="28" height="28" viewBox="0 0 24 24" fill="#007AFF"><polygon points="5,3 19,12 5,21"/></svg>
+                  </div>
+                  <span style={{ color:'rgba(255,255,255,0.4)', fontSize:14 }}>Demo Reel — Upload your video here</span>
+                </div>
+                <button onClick={() => setShowModal(false)}
+                  style={{ position:'absolute', top:16, right:16, background:'rgba(255,255,255,0.12)', border:'none', borderRadius:'50%', width:36, height:36, cursor:'pointer', display:'flex', alignItems:'center', justifyContent:'center' }}>
+                  <IconX />
+                </button>
+              </div>
+            </div>
+          )}
+        </section>
+      );
+    }
+
+    // ── SERVICES ──────────────────────────────────────────────────────────────
+    function Services() {
+      const services = [
+        {
+          icon: <IconFilm />,
+          num: '01',
+          title: 'Cinematic Product Ad',
+          promise: 'I will build a high-impact, 30-second cinematic product ad designed to stop the scroll.',
+          details: ['4K AI-generated visuals','Professional colour grading','Branded motion graphics'],
+        },
+        {
+          icon: <IconZap />,
+          num: '02',
+          title: 'Custom Script & Hook',
+          promise: "I will make a custom script focused on your product's 'hook' and unique selling points.",
+          details: ['Competitor hook analysis','Scroll-stopping opening frame','Conversion-focused CTA'],
+        },
+        {
+          icon: <IconLayers />,
+          num: '03',
+          title: 'Multi-Platform Delivery',
+          promise: 'I will deliver your video in 3 platform-ready formats: TikTok, Instagram Reel, and YouTube Short.',
+          details: ['Aspect-ratio optimised cuts','Caption & subtitle overlays','Same-week turnaround'],
+        },
+      ];
+
+      return (
+        <section id="services" style={{ padding:'120px 24px', maxWidth:1200, margin:'0 auto' }}>
+          <Reveal>
+            <div style={{ textAlign:'center', marginBottom:72 }}>
+              <span className="tag-pill" style={{ marginBottom:20, display:'inline-block' }}>The Three Pillars</span>
+              <h2 className="font-display" style={{ fontSize:'clamp(34px, 5vw, 58px)', letterSpacing:'-0.03em', lineHeight:1.1, maxWidth:520, margin:'16px auto 0' }}>
+                What I'll do for your brand
+              </h2>
+            </div>
+          </Reveal>
+
+          <div className="services-grid">
+            {services.map((s, i) => (
+              <Reveal key={i} delay={i * 0.12}>
+                <div className="bento-item card-glow" style={{ padding:'40px 32px', height:'100%', display:'flex', flexDirection:'column', gap:22 }}>
+                  <div style={{ display:'flex', justifyContent:'space-between', alignItems:'flex-start' }}>
+                    <div style={{ width:48, height:48, borderRadius:12, background:'rgba(0,122,255,0.12)', border:'1px solid rgba(0,122,255,0.2)', display:'flex', alignItems:'center', justifyContent:'center' }}>
+                      {s.icon}
+                    </div>
+                    <span style={{ fontSize:13, color:'rgba(255,255,255,0.18)', fontWeight:700, letterSpacing:'0.05em' }}>{s.num}</span>
+                  </div>
+                  <div>
+                    <div style={{ fontSize:11, color:'#007AFF', fontWeight:700, letterSpacing:'0.09em', textTransform:'uppercase', marginBottom:12 }}>{s.title}</div>
+                    <p style={{ fontSize:'clamp(16px, 1.8vw, 18px)', fontWeight:700, color:'#fff', lineHeight:1.55, letterSpacing:'-0.01em' }}>"{s.promise}"</p>
+                  </div>
+                  <div style={{ marginTop:'auto', display:'flex', flexDirection:'column', gap:10 }}>
+                    {s.details.map((d, j) => (
+                      <div key={j} style={{ display:'flex', alignItems:'center', gap:10 }}>
+                        <IconCheck />
+                        <span style={{ fontSize:14, color:'rgba(255,255,255,0.48)' }}>{d}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </Reveal>
+            ))}
+          </div>
+        </section>
+      );
+    }
+
+    // ── PORTFOLIO ─────────────────────────────────────────────────────────────
+    function Portfolio() {
+      const items = [
+        { label:'Skincare Launch', tag:'TikTok · 2.1M views', tall:true, color:'rgba(0,122,255,0.08)' },
+        { label:'DTC Supplement', tag:'IG Reel · 890K views', tall:false, color:'rgba(0,199,190,0.07)' },
+        { label:'Fashion Drop', tag:'YouTube Short · 1.4M views', tall:false, color:'rgba(255,107,53,0.07)' },
+        { label:'SaaS Product Demo', tag:'TikTok · 3.7M views', tall:true, color:'rgba(0,122,255,0.08)' },
+        { label:'Fitness Equipment', tag:'IG Reel · 560K views', tall:false, color:'rgba(191,90,242,0.07)' },
+        { label:'Luxury Fragrance', tag:'YouTube Short · 2.8M views', tall:false, color:'rgba(255,55,95,0.07)' },
+      ];
+      const tagColors = ['#007AFF','#00C7BE','#FF6B35','#007AFF','#BF5AF2','#FF375F'];
+
+      return (
+        <section id="work" style={{ padding:'80px 24px 120px', maxWidth:1200, margin:'0 auto' }}>
+          <Reveal>
+            <div style={{ textAlign:'center', marginBottom:64 }}>
+              <span className="tag-pill" style={{ marginBottom:20, display:'inline-block' }}>The Portfolio</span>
+              <h2 className="font-display" style={{ fontSize:'clamp(34px, 5vw, 58px)', letterSpacing:'-0.03em', lineHeight:1.1 }}>
+                Ads that earned their place in the feed
+              </h2>
+            </div>
+          </Reveal>
+
+          <div className="bento-grid">
+            {items.map((item, i) => (
+              <Reveal key={i} delay={i * 0.07}>
+                <div
+                  className={`bento-item ${item.tall ? 'bento-tall' : ''}`}
+                  style={{ height:'100%', position:'relative', overflow:'hidden', background:`linear-gradient(135deg, ${item.color} 0%, transparent 70%), rgba(255,255,255,0.03)` }}
+                >
+                  <div className="scanlines" />
+                  <div style={{ position:'absolute', inset:0, display:'flex', flexDirection:'column', justifyContent:'space-between', padding:'20px 18px' }}>
+                    <div style={{ display:'flex', justifyContent:'space-between', alignItems:'flex-start' }}>
+                      <div style={{ width:34, height:34, borderRadius:'50%', background:'rgba(255,255,255,0.08)', display:'flex', alignItems:'center', justifyContent:'center' }}>
+                        <svg width="13" height="13" viewBox="0 0 24 24" fill="rgba(255,255,255,0.6)"><polygon points="5,3 19,12 5,21"/></svg>
+                      </div>
+                      <span className="stat-badge" style={{ background:`${tagColors[i]}18`, borderColor:`${tagColors[i]}44`, color:tagColors[i], fontSize:11 }}>
+                        {item.tag}
+                      </span>
+                    </div>
+                    <div>
+                      <div style={{ fontSize:'clamp(14px, 1.8vw, 17px)', fontWeight:700, color:'#fff', letterSpacing:'-0.02em' }}>{item.label}</div>
+                    </div>
+                  </div>
+                </div>
+              </Reveal>
+            ))}
+          </div>
+        </section>
+      );
+    }
+
+    // ── PROCESS ───────────────────────────────────────────────────────────────
+    function Process() {
+      const steps = [
+        {
+          num:'01', title:'Strategy & Hook Design',
+          desc:'We deep-dive into your product, audience, and competitors to craft an irresistible hook that earns the first 3 seconds — and holds attention to the end.',
+          detail:'Brand Brief · Competitor Audit · Hook Matrix',
+        },
+        {
+          num:'02', title:'AI Production & Cinematic Grading',
+          desc:'Your script comes to life through AI-generated visuals, motion design, and professional colour grading tuned for the emotional impact your product demands.',
+          detail:'AI Visual Synthesis · Sound Design · Colour Science',
+        },
+        {
+          num:'03', title:'Multi-Platform Delivery',
+          desc:'Your final ad is delivered in three optimised formats, fully captioned and ready to publish — straight to your ad manager or feed scheduler.',
+          detail:'TikTok 9:16 · IG Reel 4:5 · YouTube Short 9:16',
+        },
+      ];
+
+      return (
+        <section id="process" className="section-alt" style={{ padding:'80px 24px 120px' }}>
+          <div style={{ maxWidth:1100, margin:'0 auto' }}>
+            <Reveal>
+              <div style={{ textAlign:'center', marginBottom:80 }}>
+                <span className="tag-pill" style={{ marginBottom:20, display:'inline-block' }}>Brief to Launch</span>
+                <h2 className="font-display" style={{ fontSize:'clamp(34px, 5vw, 58px)', letterSpacing:'-0.03em', lineHeight:1.1 }}>
+                  How it works
+                </h2>
+              </div>
+            </Reveal>
+
+            {steps.map((s, i) => (
+              <Reveal key={i} delay={i * 0.15}>
+                <div className="process-grid">
+                  {/* Left content (even steps) */}
+                  <div className={i % 2 === 0 ? '' : 'process-left-hide'} style={{ padding:'32px 48px 32px 0', textAlign:'right', ...(i % 2 !== 0 ? {opacity:0, pointerEvents:'none'} : {}) }}>
+                    {i % 2 === 0 && <>
+                      <div style={{ fontSize:12, color:'#007AFF', fontWeight:700, letterSpacing:'0.08em', textTransform:'uppercase', marginBottom:12 }}>{s.detail}</div>
+                      <h3 className="font-display" style={{ fontSize:'clamp(19px, 2.2vw, 25px)', color:'#fff', marginBottom:12 }}>{s.title}</h3>
+                      <p style={{ fontSize:15, color:'rgba(255,255,255,0.48)', lineHeight:1.7 }}>{s.desc}</p>
+                    </>}
+                  </div>
+
+                  {/* Center node */}
+                  <div style={{ display:'flex', flexDirection:'column', alignItems:'center', justifyContent:'center', position:'relative', height:'100%', minHeight:160 }}>
+                    {i < steps.length - 1 && <div style={{ position:'absolute', top:'50%', bottom:0, left:'50%', width:1, background:'linear-gradient(to bottom, rgba(0,122,255,0.5), rgba(0,122,255,0.1))', transform:'translateX(-50%)' }} />}
+                    {i > 0 && <div style={{ position:'absolute', top:0, bottom:'50%', left:'50%', width:1, background:'linear-gradient(to bottom, rgba(0,122,255,0.1), rgba(0,122,255,0.5))', transform:'translateX(-50%)' }} />}
+                    <div style={{ width:48, height:48, borderRadius:'50%', background:'rgba(0,122,255,0.15)', border:'1px solid rgba(0,122,255,0.45)', display:'flex', alignItems:'center', justifyContent:'center', zIndex:1, boxShadow:'0 0 20px rgba(0,122,255,0.22)' }}>
+                      <span className="font-display" style={{ fontSize:13, color:'#007AFF' }}>{s.num}</span>
+                    </div>
+                  </div>
+
+                  {/* Right content (odd steps) */}
+                  <div className={i % 2 === 1 ? '' : 'process-right-hide'} style={{ padding:'32px 0 32px 48px', ...(i % 2 === 0 ? {opacity:0, pointerEvents:'none'} : {}) }}>
+                    {i % 2 === 1 && <>
+                      <div style={{ fontSize:12, color:'#007AFF', fontWeight:700, letterSpacing:'0.08em', textTransform:'uppercase', marginBottom:12 }}>{s.detail}</div>
+                      <h3 className="font-display" style={{ fontSize:'clamp(19px, 2.2vw, 25px)', color:'#fff', marginBottom:12 }}>{s.title}</h3>
+                      <p style={{ fontSize:15, color:'rgba(255,255,255,0.48)', lineHeight:1.7 }}>{s.desc}</p>
+                    </>}
+                  </div>
+                </div>
+              </Reveal>
+            ))}
+          </div>
+        </section>
+      );
+    }
+
+    // ── TESTIMONIALS ──────────────────────────────────────────────────────────
+    function Testimonials() {
+      const quotes = [
+        { text:"FrameForge delivered a TikTok ad that outperformed our entire in-house team's output in the first week. ROAS went from 1.8× to 4.1×.", name:"Aisha K.", role:"CMO, DTC Skincare Brand" },
+        { text:"The hook they wrote was better than anything we'd tested in 6 months. Within 3 days the ad had half a million views organically.", name:"Marcus T.", role:"Founder, Supplement Co." },
+        { text:"Fastest turnaround I've ever seen. Brief on Monday, production-ready ad by Friday. Absolutely elite quality.", name:"Priya N.", role:"Head of Growth, VC-backed SaaS" },
+      ];
+
+      return (
+        <section style={{ padding:'80px 24px 120px', maxWidth:1200, margin:'0 auto' }}>
+          <Reveal>
+            <div style={{ textAlign:'center', marginBottom:64 }}>
+              <span className="tag-pill" style={{ marginBottom:20, display:'inline-block' }}>Social Proof</span>
+              <h2 className="font-display" style={{ fontSize:'clamp(32px, 4vw, 50px)', letterSpacing:'-0.03em' }}>
+                Brands that made the leap
+              </h2>
+            </div>
+          </Reveal>
+          <div className="testimonials-grid">
+            {quotes.map((q, i) => (
+              <Reveal key={i} delay={i * 0.1}>
+                <div className="bento-item" style={{ padding:'32px 28px' }}>
+                  <div style={{ display:'flex', gap:4, marginBottom:20 }}>
+                    {[...Array(5)].map((_,j) => <IconStar key={j} />)}
+                  </div>
+                  <p style={{ fontSize:15, color:'rgba(255,255,255,0.68)', lineHeight:1.75, marginBottom:24 }}>"{q.text}"</p>
+                  <div style={{ display:'flex', alignItems:'center', gap:12 }}>
+                    <div style={{ width:36, height:36, borderRadius:'50%', background:'rgba(0,122,255,0.15)', display:'flex', alignItems:'center', justifyContent:'center', fontSize:14, fontWeight:800, color:'#007AFF', flexShrink:0 }}>{q.name[0]}</div>
+                    <div>
+                      <div style={{ fontSize:14, fontWeight:700, color:'#fff' }}>{q.name}</div>
+                      <div style={{ fontSize:12, color:'rgba(255,255,255,0.38)' }}>{q.role}</div>
+                    </div>
+                  </div>
+                </div>
+              </Reveal>
+            ))}
+          </div>
+        </section>
+      );
+    }
+
+    // ── CONTACT ───────────────────────────────────────────────────────────────
+    function Contact() {
+      const [submitted, setSubmitted] = useState(false);
+      const [form, setForm] = useState({ name:'', email:'', brand:'', budget:'', message:'' });
+
+      const handleSubmit = () => {
+        if (!form.name || !form.email) return;
+        setSubmitted(true);
+      };
+
+      return (
+        <section id="contact" className="section-alt" style={{ padding:'80px 24px 120px' }}>
+          <div style={{ maxWidth:680, margin:'0 auto' }}>
+            <Reveal>
+              <div style={{ textAlign:'center', marginBottom:56 }}>
+                <span className="tag-pill" style={{ marginBottom:20, display:'inline-block' }}>Get a Proposal</span>
+                <h2 className="font-display" style={{ fontSize:'clamp(34px, 5vw, 58px)', letterSpacing:'-0.03em', lineHeight:1.05, marginBottom:20 }}>
+                  Ready to stop the scroll?
+                </h2>
+                <p style={{ fontSize:17, color:'rgba(255,255,255,0.48)', lineHeight:1.65 }}>
+                  Tell me about your brand and I'll build a custom ad strategy within 24 hours.
+                </p>
+              </div>
+            </Reveal>
+
+            <Reveal delay={0.1}>
+              {!submitted ? (
+                <div style={{ display:'flex', flexDirection:'column', gap:16 }}>
+                  <div className="form-two-col">
+                    <div>
+                      <label style={{ fontSize:13, color:'rgba(255,255,255,0.38)', display:'block', marginBottom:8 }}>Your Name *</label>
+                      <input className="input-field" placeholder="Alex Johnson" value={form.name} onChange={e => setForm({...form, name:e.target.value})} />
+                    </div>
+                    <div>
+                      <label style={{ fontSize:13, color:'rgba(255,255,255,0.38)', display:'block', marginBottom:8 }}>Email *</label>
+                      <input className="input-field" type="email" placeholder="alex@brand.com" value={form.email} onChange={e => setForm({...form, email:e.target.value})} />
+                    </div>
+                  </div>
+                  <div>
+                    <label style={{ fontSize:13, color:'rgba(255,255,255,0.38)', display:'block', marginBottom:8 }}>Brand / Product</label>
+                    <input className="input-field" placeholder="e.g. Luxe Skincare" value={form.brand} onChange={e => setForm({...form, brand:e.target.value})} />
+                  </div>
+                  <div>
+                    <label style={{ fontSize:13, color:'rgba(255,255,255,0.38)', display:'block', marginBottom:8 }}>Monthly Ad Budget</label>
+                    <select className="input-field" value={form.budget} onChange={e => setForm({...form, budget:e.target.value})} style={{ appearance:'none', cursor:'pointer' }}>
+                      <option value="">Select a range</option>
+                      <option value="sub5k">Under $5,000</option>
+                      <option value="5-20k">$5,000 – $20,000</option>
+                      <option value="20-50k">$20,000 – $50,000</option>
+                      <option value="50k+">$50,000+</option>
+                    </select>
+                  </div>
+                  <div>
+                    <label style={{ fontSize:13, color:'rgba(255,255,255,0.38)', display:'block', marginBottom:8 }}>Tell me about your product</label>
+                    <textarea className="input-field" placeholder="What makes your product unique? Who's the target audience? Any existing ad performance data?" value={form.message} onChange={e => setForm({...form, message:e.target.value})} />
+                  </div>
+                  <button className="btn-primary" style={{ marginTop:8, padding:16, justifyContent:'center', fontSize:16, width:'100%' }} onClick={handleSubmit}>
+                    <IconSend /> Send Proposal Request
+                  </button>
+                  <p style={{ textAlign:'center', fontSize:13, color:'rgba(255,255,255,0.28)' }}>I respond within 24 hours. No spam, no obligations.</p>
+                </div>
+              ) : (
+                <div style={{ textAlign:'center', padding:'64px 32px', background:'rgba(0,122,255,0.06)', border:'1px solid rgba(0,122,255,0.22)', borderRadius:16 }} className="fade-in">
+                  <div style={{ width:64, height:64, borderRadius:'50%', background:'rgba(0,122,255,0.15)', display:'flex', alignItems:'center', justifyContent:'center', margin:'0 auto 24px' }}>
+                    <IconCheckBig />
+                  </div>
+                  <h3 className="font-display" style={{ fontSize:28, letterSpacing:'-0.02em', marginBottom:12 }}>You're in the queue.</h3>
+                  <p style={{ color:'rgba(255,255,255,0.48)', fontSize:15, lineHeight:1.7 }}>
+                    I'll review your brief and send a custom proposal within 24 hours. Talk soon.
+                  </p>
+                </div>
+              )}
+            </Reveal>
+          </div>
+        </section>
+      );
+    }
+
+    // ── FOOTER ────────────────────────────────────────────────────────────────
+    function Footer() {
+      return (
+        <footer style={{ borderTop:'1px solid rgba(255,255,255,0.06)', padding:'40px 24px', maxWidth:1200, margin:'0 auto' }}>
+          <div style={{ display:'flex', justifyContent:'space-between', alignItems:'center', flexWrap:'wrap', gap:20 }}>
+            <div style={{ display:'flex', alignItems:'center', gap:8 }}>
+              <div style={{ width:8, height:8, borderRadius:'50%', background:'#007AFF' }} />
+              <span className="font-display" style={{ fontSize:16 }}>FrameForge AI</span>
+            </div>
+            <span style={{ fontSize:13, color:'rgba(255,255,255,0.22)' }}>© 2025 FrameForge AI · All rights reserved.</span>
+            <div style={{ display:'flex', gap:24 }}>
+              {['Privacy','Terms','Contact'].map(l => (
+                <a key={l} href="#" style={{ fontSize:13, color:'rgba(255,255,255,0.32)', textDecoration:'none' }}>{l}</a>
+              ))}
+            </div>
+          </div>
+        </footer>
+      );
+    }
+
+    // ── APP ───────────────────────────────────────────────────────────────────
+    function App() {
+      useScrollReveal();
+      return (
+        <>
+          <div className="grain-overlay" />
+          <Nav />
+          <main>
+            <Hero />
+            <Services />
+            <Portfolio />
+            <Process />
+            <Testimonials />
+            <Contact />
+          </main>
+          <Footer />
+        </>
+      );
+    }
+
+    ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+  </script>
+</body>
+</html>
